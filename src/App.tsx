@@ -480,9 +480,11 @@ export default function NgariungApp() {
                 )}
               </div>
 
-              <h2 className="text-base sm:text-lg font-bold text-gray-800 text-center truncate px-2 font-display flex-shrink">
-                {getToolTitle()}
-              </h2>
+              {activeTool !== 'menu' && (
+                <h2 className="text-base sm:text-lg font-bold text-gray-800 text-center truncate px-2 font-display flex-shrink">
+                  {getToolTitle()}
+                </h2>
+              )}
 
               <div className="flex-1 flex justify-end">
                 <button 
