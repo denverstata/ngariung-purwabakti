@@ -192,7 +192,7 @@ export const translations = {
 
   en: {
     toastDownload: (moduleName: string) => `${moduleName} Module PDF successfully downloaded!`,
-    fabAria: 'Open Village Toolkit',
+    fabAria: 'Open Toolkit',
     langSelector: 'Select Language',
     langModalTitle: 'Select Display Language',
     langModalDesc: 'Choose your preferred language for easier reading:',
@@ -270,7 +270,7 @@ export const translations = {
       backMenu: 'Menu',
       collectionBadge: 'Smart Toolkit Collection',
       titles: {
-        menu: 'Village Toolkit',
+        menu: 'Toolkit',
         utub: 'COGS Calculator (UTUB)',
         targetVol: 'Volume Target (UTUB)',
         floorPrice: 'B2B Indicator (UTUB)',
