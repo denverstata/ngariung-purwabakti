@@ -462,30 +462,37 @@ export default function NgariungApp() {
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 backdrop-blur-md sm:items-center p-0 sm:p-4">
           <div className="modal-enter custom-scroll relative flex max-h-[92vh] w-full max-w-lg flex-col overflow-y-auto rounded-t-[2.5rem] bg-white/95 backdrop-blur-xl p-6 sm:p-8 shadow-2xl sm:rounded-[2.5rem] border border-white/60">
             
-            {/* Header Modal */}
-            <div className="mb-6 flex items-center justify-between border-b border-gray-100 pb-4">
-              {activeTool !== 'menu' ? (
-                <button 
-                  onClick={() => selectTool('menu')} 
-                  className="flex items-center gap-1.5 rounded-full bg-gray-100 px-3.5 py-1.5 text-sm font-semibold text-gray-600 hover:bg-gray-200 transition-colors cursor-pointer"
-                >
-                  <ChevronLeft size={18} /> {t.toolbox.backMenu}
-                </button>
-              ) : (
-                <div className="flex items-center gap-2">
-                  <span className="flex h-2.5 w-2.5 rounded-full bg-[#F46392] animate-ping" />
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#F46392]">{t.toolbox.collectionBadge}</span>
-                </div>
-              )}
-              <h2 className="text-xl font-bold text-gray-800 text-center truncate px-2 font-display">
+            {/* Header Modal - Robust layout with safe area padding and perfectly aligned close button */}
+            <div className="mb-6 flex items-center justify-between gap-3 border-b border-gray-100 pb-4">
+              <div className="flex-1 flex items-center min-w-0">
+                {activeTool !== 'menu' ? (
+                  <button 
+                    onClick={() => selectTool('menu')} 
+                    className="flex items-center gap-1.5 rounded-full bg-gray-100 px-3.5 py-1.5 text-xs sm:text-sm font-semibold text-gray-600 hover:bg-gray-200 transition-colors cursor-pointer shrink-0"
+                  >
+                    <ChevronLeft size={16} /> {t.toolbox.backMenu}
+                  </button>
+                ) : (
+                  <div className="flex items-center gap-2 shrink-0">
+                    <span className="flex h-2.5 w-2.5 rounded-full bg-[#F46392] animate-ping" />
+                    <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#F46392] truncate">{t.toolbox.collectionBadge}</span>
+                  </div>
+                )}
+              </div>
+
+              <h2 className="text-base sm:text-lg font-bold text-gray-800 text-center truncate px-2 font-display flex-shrink">
                 {getToolTitle()}
               </h2>
-              <button 
-                onClick={toggleToolbox} 
-                className="rounded-full bg-gray-100 p-2 text-gray-500 hover:bg-[#F46392] hover:text-white transition-colors cursor-pointer"
-              >
-                <X size={20} />
-              </button>
+
+              <div className="flex-1 flex justify-end">
+                <button 
+                  onClick={toggleToolbox} 
+                  aria-label="Tutup Menu Peralatan"
+                  className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-[#F46392] hover:text-white transition-colors cursor-pointer shrink-0"
+                >
+                  <X size={18} />
+                </button>
+              </div>
             </div>
 
             {/* Content: Main Menu */}
@@ -894,13 +901,23 @@ export default function NgariungApp() {
               setIsLangModalOpen(true);
             }}
             aria-label={t.langSelector}
-            className="bouncy-hover flex items-center gap-2 sm:gap-2.5 rounded-2xl bg-white/90 px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-bold text-gray-800 shadow-md backdrop-blur-xl border border-gray-200/80 hover:border-[#4F9A52] hover:text-[#4F9A52] hover:shadow-lg transition-all cursor-pointer"
+            className="bouncy-hover relative flex items-center gap-2 sm:gap-2.5 rounded-2xl bg-white/90 px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-bold text-gray-800 shadow-md backdrop-blur-xl border border-gray-200/80 hover:border-[#4F9A52] hover:text-[#4F9A52] hover:shadow-lg transition-all cursor-pointer"
           >
+            {/* Red Notification Pulse Dot if language is changed from default ID */}
+            {lang !== 'id' && (
+              <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 items-center justify-center">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75" />
+                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-red-600 border border-white" />
+              </span>
+            )}
+
             <div className="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-xl bg-[#4F9A52]/15 text-[#4F9A52]">
               <Globe size={16} strokeWidth={2.4} />
             </div>
             <span className="font-semibold tracking-tight">{t.langSelector}</span>
-            <span className="hidden sm:inline-flex rounded-lg bg-gray-100 px-2 py-0.5 text-[11px] font-bold uppercase text-gray-600">
+            <span className={`inline-flex rounded-lg px-2 py-0.5 text-[11px] font-bold uppercase transition-colors ${
+              lang !== 'id' ? 'bg-red-50 text-red-600 border border-red-200' : 'bg-gray-100 text-gray-600'
+            }`}>
               {lang.toUpperCase()}
             </span>
             <ChevronDown size={14} className="text-gray-400" />
@@ -1037,13 +1054,12 @@ export default function NgariungApp() {
           <TrendingUp size={16} /> {t.hero.badgeRight}
         </div>
         
-        {/* Emblem Hero: Completely Steady, Seamlessly Blended Without Cropping */}
-        <div className="relative mb-8 flex h-52 w-52 sm:h-60 sm:w-60 items-center justify-center rounded-full bg-transparent p-2">
+        {/* Emblem Hero: Solid White Circular Container with Soft Shadow & Border for Clean Cross-Device Blending */}
+        <div className="relative mb-8 flex h-52 w-52 sm:h-60 sm:w-60 items-center justify-center rounded-full bg-white p-6 shadow-xl shadow-gray-200/60 border border-gray-100/90 transition-transform hover:scale-105 duration-500">
           <img 
             src="/Logo Ngariung Purwabakti.png" 
             alt="Ngariung Purwabakti" 
             className="h-full w-full object-contain select-none"
-            style={{ mixBlendMode: 'darken' }}
           />
         </div>
 
@@ -1152,222 +1168,178 @@ export default function NgariungApp() {
           </div>
 
           <div className="flex flex-col gap-28">
-            
-            {/* --- Program 1: TATA --- */}
-            <div id="tata" className="reveal-section relative group">
-              <div className="absolute -inset-4 rounded-[3rem] bg-gradient-to-r from-[#63B3ED]/15 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-xl pointer-events-none" />
-              
-              <div className="relative rounded-[2.5rem] bg-[#FAF6F0]/70 border border-gray-100 p-8 sm:p-12 transition-all hover:bg-white hover:shadow-xl hover:border-[#63B3ED]/30">
-                <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
-                  
+            {[
+              {
+                id: 'tata',
+                pillar: t.modules.tata.pillar,
+                title: t.modules.tata.title,
+                subtitle: t.modules.tata.subtitle,
+                desc: t.modules.tata.desc,
+                accentColor: '#63B3ED',
+                badgeText: '#3182CE',
+                fromGrad: 'from-[#63B3ED]',
+                toGrad: 'to-[#90CDF4]',
+                shadowColor: 'rgba(99,179,237,0.5)',
+                floatClass: 'float-slow',
+                floatTransform: `translate3d(0, ${Math.sin(scrollY * 0.003) * 6}px, 0)`,
+                icon: <Calculator size={56} strokeWidth={2.2} />,
+                downloadModule: 'TATA',
+                downloadLabel: t.modules.tata.btnDownload,
+                tools: [
+                  { label: t.modules.tata.btnStok, toolKey: 'konversiStok', icon: <Scale size={16} />, hoverText: 'hover:text-[#3182CE]' },
+                  { label: t.modules.tata.btnKas, toolKey: 'tata', icon: <Wallet size={16} />, hoverText: 'hover:text-[#3182CE]' }
+                ],
+                dividerFrom: '#63B3ED',
+                dividerTo: '#76B852'
+              },
+              {
+                id: 'utub',
+                pillar: t.modules.utub.pillar,
+                title: t.modules.utub.title,
+                subtitle: t.modules.utub.subtitle,
+                desc: t.modules.utub.desc,
+                accentColor: '#76B852',
+                badgeText: '#2F855A',
+                fromGrad: 'from-[#76B852]',
+                toGrad: 'to-[#9AE6B4]',
+                shadowColor: 'rgba(118,184,82,0.5)',
+                floatClass: 'float-medium',
+                floatTransform: `translate3d(0, ${Math.cos(scrollY * 0.003) * 6}px, 0)`,
+                icon: <TrendingUp size={56} strokeWidth={2.2} />,
+                downloadModule: 'UTUB',
+                downloadLabel: t.modules.utub.btnDownload,
+                tools: [
+                  { label: t.modules.utub.btnHpp, toolKey: 'utub', icon: <Percent size={16} />, hoverText: 'hover:text-[#2F855A]' },
+                  { label: t.modules.utub.btnVol, toolKey: 'targetVol', icon: <Target size={16} />, hoverText: 'hover:text-[#2F855A]' },
+                  { label: t.modules.utub.btnB2b, toolKey: 'floorPrice', icon: <ShieldCheck size={16} />, hoverText: 'hover:text-[#2F855A]' }
+                ],
+                dividerFrom: '#76B852',
+                dividerTo: '#F46392'
+              },
+              {
+                id: 'sekar',
+                pillar: t.modules.sekar.pillar,
+                title: t.modules.sekar.title,
+                subtitle: t.modules.sekar.subtitle,
+                desc: t.modules.sekar.desc,
+                accentColor: '#F46392',
+                badgeText: '#B83280',
+                fromGrad: 'from-[#F46392]',
+                toGrad: 'to-[#FED7E2]',
+                shadowColor: 'rgba(244,99,146,0.5)',
+                floatClass: 'float-slow',
+                floatTransform: `translate3d(0, ${Math.sin(scrollY * 0.003 + 1) * 6}px, 0)`,
+                icon: <Leaf size={56} strokeWidth={2.2} />,
+                downloadModule: 'SEKAR',
+                downloadLabel: t.modules.sekar.btnDownload,
+                tools: [
+                  { label: t.modules.sekar.btnBrisma, toolKey: 'brisma', icon: <Flame size={16} />, hoverText: 'hover:text-[#B83280]' }
+                ],
+                dividerFrom: '#F46392',
+                dividerTo: '#4F9A52'
+              },
+              {
+                id: 'digimark',
+                pillar: t.modules.digimark.pillar,
+                title: t.modules.digimark.title,
+                subtitle: t.modules.digimark.subtitle,
+                desc: t.modules.digimark.desc,
+                accentColor: '#4F9A52',
+                badgeText: '#22543D',
+                fromGrad: 'from-[#4F9A52]',
+                toGrad: 'to-[#9AE6B4]',
+                shadowColor: 'rgba(79,154,82,0.5)',
+                floatClass: 'float-medium',
+                floatTransform: `translate3d(0, ${Math.cos(scrollY * 0.003 + 1) * 6}px, 0)`,
+                icon: <Smartphone size={56} strokeWidth={2.2} />,
+                downloadModule: 'DIGIMARK',
+                downloadLabel: t.modules.digimark.btnDownload,
+                tools: [
+                  { label: t.modules.digimark.btnCaption, toolKey: 'caption', icon: <Sparkles size={16} />, hoverText: 'hover:text-[#22543D]' },
+                  { label: t.modules.digimark.btnEcom, toolKey: 'ecommerce', icon: <ShoppingCart size={16} />, hoverText: 'hover:text-[#22543D]' }
+                ],
+                dividerFrom: null,
+                dividerTo: null
+              }
+            ].map((program, idx, arr) => (
+              <React.Fragment key={program.id}>
+                <div id={program.id} className="reveal-section relative group">
                   <div 
-                    className="bouncy-hover relative flex h-32 w-32 shrink-0 items-center justify-center rounded-[2.2rem] bg-gradient-to-tr from-[#63B3ED] to-[#90CDF4] shadow-[0_20px_40px_-10px_rgba(99,179,237,0.5)] text-white float-slow"
-                    style={{ transform: `translate3d(0, ${Math.sin(scrollY * 0.003) * 6}px, 0)` }}
-                  >
-                    <Calculator size={56} strokeWidth={2.2} />
-                  </div>
-
-                  <div className="flex-1 text-center md:text-left">
-                    <div className="inline-block rounded-full bg-[#63B3ED]/15 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[#3182CE] mb-2">
-                      {t.modules.tata.pillar}
-                    </div>
-                    <h3 className="text-3xl sm:text-4xl font-bold text-gray-900 font-display">{t.modules.tata.title}</h3>
-                    <p className="text-lg font-semibold text-[#63B3ED] mb-3">{t.modules.tata.subtitle}</p>
-                    <p className="text-gray-600 text-base leading-relaxed mb-8">
-                      {t.modules.tata.desc}
-                    </p>
-
-                    <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
-                      <button 
-                        onClick={() => handleDownload('TATA')}
-                        className="bouncy-hover flex items-center gap-2 rounded-full bg-[#63B3ED] px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#63B3ED]/30 cursor-pointer"
-                      >
-                        <Download size={18} /> {t.modules.tata.btnDownload}
-                      </button>
-                      <button 
-                        onClick={() => selectTool('konversiStok')}
-                        className="bouncy-hover flex items-center gap-2 rounded-full border border-gray-200 bg-white px-5 py-3.5 text-sm font-semibold text-gray-700 hover:border-[#63B3ED] hover:text-[#3182CE] transition-all cursor-pointer shadow-sm"
-                      >
-                        <Scale size={16} /> {t.modules.tata.btnStok}
-                      </button>
-                      <button 
-                        onClick={() => selectTool('tata')}
-                        className="bouncy-hover flex items-center gap-2 rounded-full border border-gray-200 bg-white px-5 py-3.5 text-sm font-semibold text-gray-700 hover:border-[#63B3ED] hover:text-[#3182CE] transition-all cursor-pointer shadow-sm"
-                      >
-                        <Wallet size={16} /> {t.modules.tata.btnKas}
-                      </button>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-
-            {/* Soft Fluid Gradient Spacer */}
-            <div className="relative flex items-center justify-center">
-              <div className="h-20 w-px bg-gradient-to-b from-[#63B3ED]/40 via-[#76B852]/40 to-transparent" />
-            </div>
-
-            {/* --- Program 2: UTUB --- */}
-            <div id="utub" className="reveal-section relative group">
-              <div className="absolute -inset-4 rounded-[3rem] bg-gradient-to-r from-[#76B852]/15 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-xl pointer-events-none" />
-              
-              <div className="relative rounded-[2.5rem] bg-[#FAF6F0]/70 border border-gray-100 p-8 sm:p-12 transition-all hover:bg-white hover:shadow-xl hover:border-[#76B852]/30">
-                <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+                    className="absolute -inset-4 rounded-[3rem] bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-xl pointer-events-none"
+                    style={{ backgroundImage: `linear-gradient(to right, ${program.accentColor}25, transparent, transparent)` }}
+                  />
                   
-                  <div 
-                    className="bouncy-hover relative flex h-32 w-32 shrink-0 items-center justify-center rounded-[2.2rem] bg-gradient-to-tr from-[#76B852] to-[#9AE6B4] shadow-[0_20px_40px_-10px_rgba(118,184,82,0.5)] text-white float-medium"
-                    style={{ transform: `translate3d(0, ${Math.cos(scrollY * 0.003) * 6}px, 0)` }}
-                  >
-                    <TrendingUp size={56} strokeWidth={2.2} />
-                  </div>
+                  <div className="relative rounded-[2.5rem] bg-[#FAF6F0]/70 border border-gray-100 p-8 sm:p-12 transition-all hover:bg-white hover:shadow-xl hover:border-gray-200">
+                    <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+                      
+                      {/* Program Emblem Icon */}
+                      <div 
+                        className={`bouncy-hover relative flex h-32 w-32 shrink-0 items-center justify-center rounded-[2.2rem] bg-gradient-to-tr ${program.fromGrad} ${program.toGrad} text-white ${program.floatClass}`}
+                        style={{ 
+                          boxShadow: `0 20px 40px -10px ${program.shadowColor}`,
+                          transform: program.floatTransform 
+                        }}
+                      >
+                        {program.icon}
+                      </div>
 
-                  <div className="flex-1 text-center md:text-left">
-                    <div className="inline-block rounded-full bg-[#76B852]/15 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[#2F855A] mb-2">
-                      {t.modules.utub.pillar}
+                      {/* Program Details */}
+                      <div className="flex-1 text-center md:text-left">
+                        <div 
+                          className="inline-block rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider mb-2"
+                          style={{ backgroundColor: `${program.accentColor}25`, color: program.badgeText }}
+                        >
+                          {program.pillar}
+                        </div>
+                        <h3 className="text-3xl sm:text-4xl font-bold text-gray-900 font-display">{program.title}</h3>
+                        <p className="text-lg font-semibold mb-3" style={{ color: program.accentColor }}>{program.subtitle}</p>
+                        <p className="text-gray-600 text-base leading-relaxed mb-8">
+                          {program.desc}
+                        </p>
+
+                        {/* Interactive Buttons */}
+                        <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
+                          <button 
+                            onClick={() => handleDownload(program.downloadModule)}
+                            className="bouncy-hover flex items-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold text-white shadow-lg cursor-pointer"
+                            style={{ 
+                              backgroundColor: program.accentColor,
+                              boxShadow: `0 10px 25px -5px ${program.shadowColor}`
+                            }}
+                          >
+                            <Download size={18} /> {program.downloadLabel}
+                          </button>
+
+                          {program.tools.map((tool) => (
+                            <button 
+                              key={tool.toolKey}
+                              onClick={() => selectTool(tool.toolKey)}
+                              className={`bouncy-hover flex items-center gap-2 rounded-full border border-gray-200 bg-white px-5 py-3.5 text-sm font-semibold text-gray-700 transition-all cursor-pointer shadow-sm ${tool.hoverText}`}
+                              style={{ borderColor: undefined }}
+                            >
+                              {tool.icon} {tool.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
                     </div>
-                    <h3 className="text-3xl sm:text-4xl font-bold text-gray-900 font-display">{t.modules.utub.title}</h3>
-                    <p className="text-lg font-semibold text-[#76B852] mb-3">{t.modules.utub.subtitle}</p>
-                    <p className="text-gray-600 text-base leading-relaxed mb-8">
-                      {t.modules.utub.desc}
-                    </p>
-
-                    <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
-                      <button 
-                        onClick={() => handleDownload('UTUB')}
-                        className="bouncy-hover flex items-center gap-2 rounded-full bg-[#76B852] px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#76B852]/30 cursor-pointer"
-                      >
-                        <Download size={18} /> {t.modules.utub.btnDownload}
-                      </button>
-                      <button 
-                        onClick={() => selectTool('utub')}
-                        className="bouncy-hover flex items-center gap-2 rounded-full border border-gray-200 bg-white px-5 py-3.5 text-sm font-semibold text-gray-700 hover:border-[#76B852] hover:text-[#2F855A] transition-all cursor-pointer shadow-sm"
-                      >
-                        <Percent size={16} /> {t.modules.utub.btnHpp}
-                      </button>
-                      <button 
-                        onClick={() => selectTool('targetVol')}
-                        className="bouncy-hover flex items-center gap-2 rounded-full border border-gray-200 bg-white px-5 py-3.5 text-sm font-semibold text-gray-700 hover:border-[#76B852] hover:text-[#2F855A] transition-all cursor-pointer shadow-sm"
-                      >
-                        <Target size={16} /> {t.modules.utub.btnVol}
-                      </button>
-                      <button 
-                        onClick={() => selectTool('floorPrice')}
-                        className="bouncy-hover flex items-center gap-2 rounded-full border border-gray-200 bg-white px-5 py-3.5 text-sm font-semibold text-gray-700 hover:border-[#76B852] hover:text-[#2F855A] transition-all cursor-pointer shadow-sm"
-                      >
-                        <ShieldCheck size={16} /> {t.modules.utub.btnB2b}
-                      </button>
-                    </div>
                   </div>
-
                 </div>
-              </div>
-            </div>
 
-            {/* Soft Fluid Gradient Spacer */}
-            <div className="relative flex items-center justify-center">
-              <div className="h-20 w-px bg-gradient-to-b from-[#76B852]/40 via-[#F46392]/40 to-transparent" />
-            </div>
-
-            {/* --- Program 3: SEKAR --- */}
-            <div id="sekar" className="reveal-section relative group">
-              <div className="absolute -inset-4 rounded-[3rem] bg-gradient-to-r from-[#F46392]/15 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-xl pointer-events-none" />
-              
-              <div className="relative rounded-[2.5rem] bg-[#FAF6F0]/70 border border-gray-100 p-8 sm:p-12 transition-all hover:bg-white hover:shadow-xl hover:border-[#F46392]/30">
-                <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
-                  
-                  <div 
-                    className="bouncy-hover relative flex h-32 w-32 shrink-0 items-center justify-center rounded-[2.2rem] bg-gradient-to-tr from-[#F46392] to-[#FED7E2] shadow-[0_20px_40px_-10px_rgba(244,99,146,0.5)] text-white float-slow"
-                    style={{ transform: `translate3d(0, ${Math.sin(scrollY * 0.003 + 1) * 6}px, 0)` }}
-                  >
-                    <Leaf size={56} strokeWidth={2.2} />
+                {/* Soft Fluid Gradient Spacer between sections */}
+                {idx < arr.length - 1 && (
+                  <div className="relative flex items-center justify-center">
+                    <div 
+                      className="h-20 w-px"
+                      style={{ 
+                        backgroundImage: `linear-gradient(to bottom, ${program.dividerFrom}66, ${program.dividerTo}66, transparent)` 
+                      }}
+                    />
                   </div>
-
-                  <div className="flex-1 text-center md:text-left">
-                    <div className="inline-block rounded-full bg-[#F46392]/15 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[#B83280] mb-2">
-                      {t.modules.sekar.pillar}
-                    </div>
-                    <h3 className="text-3xl sm:text-4xl font-bold text-gray-900 font-display">{t.modules.sekar.title}</h3>
-                    <p className="text-lg font-semibold text-[#F46392] mb-3">{t.modules.sekar.subtitle}</p>
-                    <p className="text-gray-600 text-base leading-relaxed mb-8">
-                      {t.modules.sekar.desc}
-                    </p>
-
-                    <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
-                      <button 
-                        onClick={() => handleDownload('SEKAR')}
-                        className="bouncy-hover flex items-center gap-2 rounded-full bg-[#F46392] px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#F46392]/30 cursor-pointer"
-                      >
-                        <Download size={18} /> {t.modules.sekar.btnDownload}
-                      </button>
-                      <button 
-                        onClick={() => selectTool('brisma')}
-                        className="bouncy-hover flex items-center gap-2 rounded-full border border-gray-200 bg-white px-5 py-3.5 text-sm font-semibold text-gray-700 hover:border-[#F46392] hover:text-[#B83280] transition-all cursor-pointer shadow-sm"
-                      >
-                        <Flame size={16} /> {t.modules.sekar.btnBrisma}
-                      </button>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-
-            {/* Soft Fluid Gradient Spacer */}
-            <div className="relative flex items-center justify-center">
-              <div className="h-20 w-px bg-gradient-to-b from-[#F46392]/40 via-[#4F9A52]/40 to-transparent" />
-            </div>
-
-            {/* --- Program 4: DIGIMARK --- */}
-            <div id="digimark" className="reveal-section relative group">
-              <div className="absolute -inset-4 rounded-[3rem] bg-gradient-to-r from-[#4F9A52]/15 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-xl pointer-events-none" />
-              
-              <div className="relative rounded-[2.5rem] bg-[#FAF6F0]/70 border border-gray-100 p-8 sm:p-12 transition-all hover:bg-white hover:shadow-xl hover:border-[#4F9A52]/30">
-                <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
-                  
-                  <div 
-                    className="bouncy-hover relative flex h-32 w-32 shrink-0 items-center justify-center rounded-[2.2rem] bg-gradient-to-tr from-[#4F9A52] to-[#9AE6B4] shadow-[0_20px_40px_-10px_rgba(79,154,82,0.5)] text-white float-medium"
-                    style={{ transform: `translate3d(0, ${Math.cos(scrollY * 0.003 + 1) * 6}px, 0)` }}
-                  >
-                    <Smartphone size={56} strokeWidth={2.2} />
-                  </div>
-
-                  <div className="flex-1 text-center md:text-left">
-                    <div className="inline-block rounded-full bg-[#4F9A52]/15 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[#22543D] mb-2">
-                      {t.modules.digimark.pillar}
-                    </div>
-                    <h3 className="text-3xl sm:text-4xl font-bold text-gray-900 font-display">{t.modules.digimark.title}</h3>
-                    <p className="text-lg font-semibold text-[#4F9A52] mb-3">{t.modules.digimark.subtitle}</p>
-                    <p className="text-gray-600 text-base leading-relaxed mb-8">
-                      {t.modules.digimark.desc}
-                    </p>
-
-                    <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
-                      <button 
-                        onClick={() => handleDownload('DIGIMARK')}
-                        className="bouncy-hover flex items-center gap-2 rounded-full bg-[#4F9A52] px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#4F9A52]/30 cursor-pointer"
-                      >
-                        <Download size={18} /> {t.modules.digimark.btnDownload}
-                      </button>
-                      <button 
-                        onClick={() => selectTool('caption')}
-                        className="bouncy-hover flex items-center gap-2 rounded-full border border-gray-200 bg-white px-5 py-3.5 text-sm font-semibold text-gray-700 hover:border-[#4F9A52] hover:text-[#22543D] transition-all cursor-pointer shadow-sm"
-                      >
-                        <Sparkles size={16} /> {t.modules.digimark.btnCaption}
-                      </button>
-                      <button 
-                        onClick={() => selectTool('ecommerce')}
-                        className="bouncy-hover flex items-center gap-2 rounded-full border border-gray-200 bg-white px-5 py-3.5 text-sm font-semibold text-gray-700 hover:border-[#4F9A52] hover:text-[#22543D] transition-all cursor-pointer shadow-sm"
-                      >
-                        <ShoppingCart size={16} /> {t.modules.digimark.btnEcom}
-                      </button>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-
+                )}
+              </React.Fragment>
+            ))}
           </div>
         </div>
       </section>
@@ -1431,41 +1403,6 @@ export default function NgariungApp() {
           </div>
         </div>
       </footer>
-
-      {/* --- Panic Button Safety Net: Return to Bahasa Indonesia --- */}
-      {lang !== 'id' && (
-        <aside 
-          aria-label="Safety net reset bahasa"
-          className="fixed bottom-5 left-4 right-4 sm:left-6 sm:right-auto z-40 max-w-md animate-bounce-subtle"
-        >
-          <div className="flex items-center justify-between gap-3 rounded-2xl bg-gradient-to-r from-red-600 to-rose-600 p-3.5 sm:p-4 text-white shadow-[0_15px_30px_rgba(225,29,72,0.4)] border border-white/20 backdrop-blur-md">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/20 text-white">
-                <RotateCcw size={20} className="animate-spin-slow" />
-              </div>
-              <div className="leading-tight">
-                <p className="text-xs uppercase font-extrabold tracking-wider text-white/90">
-                  {lang === 'su' ? 'Basa Sunda Aktip' : 'English Active'}
-                </p>
-                <p className="text-sm font-bold text-white">
-                  {t.panicBanner}
-                </p>
-              </div>
-            </div>
-
-            <button
-              onClick={() => {
-                playFunSound('tada');
-                handleLanguageChange('id');
-              }}
-              className="shrink-0 flex items-center gap-1.5 rounded-xl bg-white px-3.5 py-2 text-xs sm:text-sm font-bold text-red-600 shadow-md hover:bg-gray-50 active:scale-95 transition-all cursor-pointer"
-            >
-              <span>Ubah</span>
-              <ArrowRight size={14} strokeWidth={2.5} />
-            </button>
-          </div>
-        </aside>
-      )}
     </div>
   );
 }

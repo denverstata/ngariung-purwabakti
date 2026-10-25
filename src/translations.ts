@@ -75,7 +75,7 @@ export const translations = {
       location: 'Desa Purwabakti, Kecamatan Pamijahan, Kabupaten Bogor, Jawa Barat',
       instagram: 'Ikuti kami di Instagram @ngariungpurwabakti',
       devBadge: 'Pengembangan Web Platform',
-      devText: 'Website ini dibangun dan dikembangkan oleh',
+      devText: 'Dukungan teknis pengembangan platform website oleh',
     },
     toolbox: {
       backMenu: 'Menu',
@@ -264,7 +264,7 @@ export const translations = {
       location: 'Purwabakti Village, Pamijahan District, Bogor Regency, West Java',
       instagram: 'Follow us on Instagram @ngariungpurwabakti',
       devBadge: 'Web Platform Development',
-      devText: 'This website is designed and developed by',
+      devText: 'Technical website platform support by',
     },
     toolbox: {
       backMenu: 'Menu',
@@ -453,7 +453,7 @@ export const translations = {
       location: 'Désa Purwabakti, Kacamatan Pamijahan, Kabupatén Bogor, Jawa Barat',
       instagram: 'Mangga tuturkeun Instagram @ngariungpurwabakti',
       devBadge: 'Pangwangunan Web Platform',
-      devText: 'Ieu ramatloka diwangun sareng dimekarkeun ku',
+      devText: 'Rojongan téknis pangwangunan platform ramatloka ku',
     },
     toolbox: {
       backMenu: 'Menu',
